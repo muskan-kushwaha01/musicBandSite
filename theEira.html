@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Eira - Music Band</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Source+Serif+Pro:wght@400;700&display=swap');
+        
+        body {
+            font-family: 'Source Serif Pro', serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fff;
+            text-align: center;
+            scroll-behavior: smooth;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(200, 200, 200, 0.5);
+            padding: 10px 20px;
+            color: black;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+           
+           transition: opacity 0.3s ease;
+        }
+        .navbar.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        .navbar:hover {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 40px;
+            font-size: 20px;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: black;
+            transition: color 0.3s;
+        }
+        .nav-links a:hover {
+            color: gold;
+            text-decoration: underline;
+
+        }
+        .white a:hover{
+           color: white 
+           }
+        .btn {
+            background: gold;
+            padding: 5px 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            color: black;
+        }
+         .btn:hover, .btn:active {
+            background: gold;
+            color: white;
+        }
+        .hero {
+          background: url('C:/Users/asus/Desktop/theEira/images/eira4.png') no-repeat center center/cover;
+
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .hero-logo {
+            width: 200px;
+            font-size: 36px;
+            font-weight: bold;
+            color: dark-blue;
+        }
+        .section {
+            padding: 50px;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s ease-in-out;
+        }
+        .visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .about, .contact {
+            font-size: 70px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .about-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            background: #f4f4f4;
+            padding: 40px;
+            border-radius: 10px;
+        }
+        .about-img {
+            width: 50%;
+            height: auto;
+            border-radius: 10px;
+        }
+        .about-text {
+            width: 40%;
+            font-size: 22px;
+        }
+        .contact {
+            background: #222;
+            color: white;
+            padding: 60px;
+        }
+        .contact-info p {
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: center;
+        }
+        .contact-info img {
+            width: 30px;
+            height: 30px;
+        }
+        .footer-content {
+            background: black;
+            color: white;
+            padding: 20px;
+        }
+        .socials a {
+            color: gold;
+            margin: 0 10px;
+            text-decoration: none;
+        }
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                text-align: center;
+            }
+            .nav-links {
+                flex-direction: column;
+                padding: 0;
+            }
+            .about-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            .about-img, .about-text {
+                width: 100%;
+            }
+        }
+.gallery {
+            position: relative;
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            padding: 50px 0;
+        }
+        .gallery h2 {
+            font-size: 50px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .gallery-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.5s ease-in-out;
+        }
+        .gallery img {
+            width: 30%;
+            max-height: 500px;
+            object-fit: cover;
+            border-radius: 10px;
+            opacity: 0.3;
+            transition: opacity 0.5s, transform 0.5s;
+        }
+        .gallery img.active {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        .gallery img.prev, .gallery img.next {
+            opacity: 0.6;
+            transform: scale(0.9);
+        }
+        .gallery-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 24px;
+            border-radius: 50%;
+        }
+        .prev {
+            left: 10px;
+        }
+        .next {
+            right: 10px;
+        }
+        .contact {
+            background: #222;
+            color: white;
+            padding: 60px;
+        }
+        .contact-info p {
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: center;
+        }
+        .contact-info img {
+            width: 20px;
+            height: 20px;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let sections = document.querySelectorAll(".section");
+            let options = { threshold: 0.2 };
+            let observer = new IntersectionObserver(function (entries, observer) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("visible");
+                    }
+                });
+            }, options);
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+ <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let navbar = document.querySelector(".navbar");
+            let lastScrollTop = 0; let isHovering = false;
+            
+            window.addEventListener("scroll", function () {
+                let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                if (scrollTop > lastScrollTop && !isHovering) {
+                    navbar.classList.add("hidden");
+                } else {
+                    navbar.classList.remove("hidden");
+                }
+                lastScrollTop = scrollTop;
+            });
+            
+            navbar.addEventListener("mouseenter", function () {
+                isHovering = true;
+                navbar.classList.remove("hidden");
+            });
+            
+            navbar.addEventListener("mouseleave", function () {
+                isHovering = false;
+                if (window.pageYOffset > 0) {
+                    navbar.classList.add("hidden");
+                }
+            });
+        });
+    </script>
+ <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let images = document.querySelectorAll(".gallery img");
+            let index = 1;
+            
+            function updateGallery() {
+                images.forEach((img, i) => {
+                    img.classList.remove("active", "prev", "next");
+                    if (i === index) {
+                        img.classList.add("active");
+                    } else if (i === index - 1) {
+                        img.classList.add("prev");
+                    } else if (i === index + 1) {
+                        img.classList.add("next");
+                    }
+                });
+            }
+            
+            document.querySelector(".prev").addEventListener("click", function () {
+                index = (index - 1 + images.length) % images.length;
+                updateGallery();
+            });
+            
+            document.querySelector(".next").addEventListener("click", function () {
+                index = (index + 1) % images.length;
+                updateGallery();
+            });
+            
+            updateGallery();
+        });
+    </script>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo hero-logo">The Eira</div>
+            <ul class="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+                <li><a href="#" class="btn">Enquiry</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero"></section>
+
+    <section id="about" class="section">
+        <h2 class="about">ABOUT US</h2>
+        <div class="about-content">
+            <img src="https://i.ytimg.com/vi/mhFVcn4MjTI/maxresdefault.jpg" alt="Band Image" class="about-img">
+            <p class="about-text">A soulful journey into Sufi music, blending traditional melodies with modern rhythms.</p>
+        </div>
+    </section>
+
+    <section class="gallery">
+        <h2>Event Gallery</h2>
+        <button class="gallery-btn prev">&#10094;</button>
+        <div class="gallery-container">
+            <img src="C:/Users/asus/Desktop/theEira/images/img1.png" alt="Event 1">
+            <img src="C:/Users/asus/Desktop/theEira/images/img2.png" alt="Event 2">
+            <img src="C:/Users/asus/Desktop/theEira/images/img3.png" alt="Event 3">
+        </div>
+        <button class="gallery-btn next">&#10095;</button>
+    </section>
+
+    <section id="contact" class="section">
+        <h2 class="contact">CONTACT US</h2>
+        <div class="contact-info">
+            <p><img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram Logo"> <strong> Instagram:</strong> @theEira_musicBand</p>
+            <p><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_4N37TIgWC_QLpspNwGddZH8DhzljeYMFnA&s" alt="YouTube Logo"> <strong>YouTube:</strong> theEira_musicBand</p>
+            <p><img src="https://upload.wikimedia.org/wikipedia/commons/4/4e/Gmail_Icon.png" alt="Email Logo"> <strong>Email:</strong> contact@yourband.com</p>
+            <p><img src="https://cdn-icons-png.flaticon.com/512/6523/6523368.png" alt="Phone Logo"> <strong>Phone:</strong> +91 7303408379</p>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 The Eira. All Rights Reserved.</p>
+            <p>📍 New Delhi, India</p>
+          <div class="socials">
+                <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png" alt="Instagram Logo" width="20"> Instagram</a>
+                <a href="#"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_4N37TIgWC_QLpspNwGddZH8DhzljeYMFnA&s" alt="YouTube Logo" width="20"> YouTube</a>
+                <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/LinkedIn_logo_initials.png" alt="LinkedIn Logo" width="20"> LinkedIn</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
